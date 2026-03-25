@@ -10,7 +10,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shopfinder.in"),
+  metadataBase: new URL("https://shopfinder.com"),
   title: {
     default: "ShopFinder - Discover Small Businesses on Instagram in India",
     template: "%s | ShopFinder",

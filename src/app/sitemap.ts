@@ -1,9 +1,14 @@
 import { MetadataRoute } from "next";
-import { businesses, categories } from "@/lib/data";
+import { getAllBusinesses, getAllCategories } from "@/lib/data";
 
-const BASE_URL = "https://shopfinder.in";
+const BASE_URL = "https://shopfinder.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [businesses, categories] = await Promise.all([
+    getAllBusinesses(),
+    getAllCategories(),
+  ]);
+
   const businessUrls = businesses.map((b) => ({
     url: `${BASE_URL}/business/${b.instagramHandle.replace("@", "")}`,
     lastModified: new Date(b.addedAt),

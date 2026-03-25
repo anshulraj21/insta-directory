@@ -4,6 +4,8 @@ import { ChevronRight, SearchX } from "lucide-react";
 import { searchBusinesses } from "@/lib/data";
 import BusinessCard from "@/components/BusinessCard";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   searchParams: Promise<{ q?: string }>;
 }
@@ -18,7 +20,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function SearchPage({ searchParams }: Props) {
   const sp = await searchParams;
   const query = sp.q || "";
-  const results = query ? searchBusinesses(query) : [];
+  const results = query ? await searchBusinesses(query) : [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

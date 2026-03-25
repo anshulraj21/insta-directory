@@ -2,14 +2,17 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, MapPin, ExternalLink, Tag, Store } from "lucide-react";
-import { businesses, getBusinessByHandle, categories } from "@/lib/data";
+import { getAllBusinesses, getBusinessByHandle, getAllCategories, getRelatedBusinesses } from "@/lib/data";
 import BusinessCard from "@/components/BusinessCard";
 
 interface Props {
   params: Promise<{ handle: string }>;
 }
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
+  const businesses = await getAllBusinesses();
   return businesses.map((b) => ({
     handle: b.instagramHandle.replace("@", ""),
   }));
@@ -17,7 +20,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { handle } = await params;
-  const business = getBusinessByHandle(handle);
+  const business = await getBusinessByHandle(handle);
   if (!business) return {};
   return {
     title: `${business.businessName} - ${business.subCategory} on Instagram`,
@@ -34,21 +37,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BusinessPage({ params }: Props) {
   const { handle } = await params;
-  const business = getBusinessByHandle(handle);
+  const business = await getBusinessByHandle(handle);
   if (!business) notFound();
 
+  const categories = await getAllCategories();
   const categorySlug = categories.find((c) => c.name === business.category)?.slug || "";
 
-  const relatedBusinesses = businesses
-    .filter((b) => b.category === business.category && b.id !== business.id)
-    .slice(0, 4);
+  const relatedBusinesses = await getRelatedBusinesses(business.category, business.id, 4);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: business.businessName,
     description: business.description,
-    url: `https://shopfinder.in/business/${handle}`,
+    url: `https://shopfinder.com/business/${handle}`,
     sameAs: [`https://instagram.com/${handle}`],
     address: {
       "@type": "PostalAddress",
@@ -59,8 +61,8 @@ export default async function BusinessPage({ params }: Props) {
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://shopfinder.in" },
-        { "@type": "ListItem", position: 2, name: business.category, item: `https://shopfinder.in/categories/${categorySlug}` },
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://shopfinder.com" },
+        { "@type": "ListItem", position: 2, name: business.category, item: `https://shopfinder.com/categories/${categorySlug}` },
         { "@type": "ListItem", position: 3, name: business.businessName },
       ],
     },

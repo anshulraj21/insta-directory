@@ -20,6 +20,8 @@ const CATEGORIES = [
 
 export default function SubmitPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     instagramHandle: "",
     businessName: "",
@@ -28,11 +30,31 @@ export default function SubmitPage() {
     description: "",
   });
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // In production, this would POST to an API route
-    console.log("Submitted:", form);
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/businesses/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("Failed to submit. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (submitted) {
@@ -141,12 +163,19 @@ export default function SubmitPage() {
           />
         </div>
 
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
+
         <button
           type="submit"
-          className="w-full flex items-center justify-center gap-2 bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 transition font-medium"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Send className="w-4 h-4" />
-          Submit Business
+          {loading ? "Submitting..." : "Submit Business"}
         </button>
       </form>
     </div>

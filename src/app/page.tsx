@@ -1,22 +1,43 @@
 import Link from "next/link";
 import { Search, ArrowRight } from "lucide-react";
-import { businesses, categories, getBusinessesByCategory } from "@/lib/data";
+import {
+  getAllCategories,
+  getBusinessesByCategory,
+  getBusinessCount,
+  getCategoryCount,
+  getFeaturedBusinesses,
+} from "@/lib/data";
 import CategoryCard from "@/components/CategoryCard";
 import BusinessCard from "@/components/BusinessCard";
 
-export default function HomePage() {
-  const featuredBusinesses = businesses.slice(0, 8);
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const [categories, businessCount, categoryCount, featuredBusinesses] =
+    await Promise.all([
+      getAllCategories(),
+      getBusinessCount(),
+      getCategoryCount(),
+      getFeaturedBusinesses(8),
+    ]);
+
+  // Get counts per category
+  const categoriesWithCounts = await Promise.all(
+    categories.map(async (cat) => ({
+      category: cat,
+      count: (await getBusinessesByCategory(cat.slug)).length,
+    }))
+  );
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "ShopFinder",
-    url: "https://shopfinder.in",
-    description:
-      "Discover 425+ curated small businesses on Instagram in India.",
+    url: "https://shopfinder.com",
+    description: `Discover ${businessCount}+ curated small businesses on Instagram in India.`,
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://shopfinder.in/search?q={search_term_string}",
+      target: "https://shopfinder.com/search?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };
@@ -38,8 +59,8 @@ export default function HomePage() {
             on Instagram
           </h1>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Browse {businesses.length}+ curated Indian small businesses across{" "}
-            {categories.length} categories. Find hidden gems, support local, and
+            Browse {businessCount}+ curated Indian small businesses across{" "}
+            {categoryCount} categories. Find hidden gems, support local, and
             shop with confidence.
           </p>
           <Link
@@ -57,11 +78,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center gap-8 sm:gap-16 text-center">
             <div>
-              <div className="text-2xl font-bold text-gray-900">{businesses.length}+</div>
+              <div className="text-2xl font-bold text-gray-900">{businessCount}+</div>
               <div className="text-sm text-gray-500">Businesses</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-gray-900">{categories.length}</div>
+              <div className="text-2xl font-bold text-gray-900">{categoryCount}</div>
               <div className="text-sm text-gray-500">Categories</div>
             </div>
             <div>
@@ -79,11 +100,11 @@ export default function HomePage() {
             Browse by Category
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {categories.map((cat) => (
+            {categoriesWithCounts.map(({ category: cat, count }) => (
               <CategoryCard
                 key={cat.id}
                 category={cat}
-                count={getBusinessesByCategory(cat.slug).length}
+                count={count}
               />
             ))}
           </div>

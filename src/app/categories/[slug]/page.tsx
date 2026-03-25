@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { categories, getBusinessesByCategory, getCategoryBySlug } from "@/lib/data";
+import { getAllCategories, getBusinessesByCategory, getCategoryBySlug } from "@/lib/data";
 import BusinessCard from "@/components/BusinessCard";
 import CategoryFilter from "@/components/CategoryFilter";
 
@@ -11,13 +11,16 @@ interface Props {
   searchParams: Promise<{ sub?: string; city?: string; page?: string }>;
 }
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
+  const categories = await getAllCategories();
   return categories.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug);
   if (!category) return {};
   return {
     title: `Best ${category.name} Instagram Businesses in India`,
@@ -35,10 +38,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params;
   const sp = await searchParams;
-  const category = getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
-  let filtered = getBusinessesByCategory(slug);
+  let filtered = await getBusinessesByCategory(slug);
 
   if (sp.sub) {
     filtered = filtered.filter((b) => b.subCategory === sp.sub);
@@ -54,9 +57,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const totalPages = Math.ceil(filtered.length / perPage);
   const paged = filtered.slice((page - 1) * perPage, page * perPage);
 
+  const allInCategory = await getBusinessesByCategory(slug);
   const cities = Array.from(
     new Set(
-      getBusinessesByCategory(slug)
+      allInCategory
         .filter((b) => b.city)
         .map((b) => b.city)
     )
@@ -67,11 +71,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     "@type": "CollectionPage",
     name: `Best ${category.name} Instagram Businesses in India`,
     description: category.description,
-    url: `https://shopfinder.in/categories/${slug}`,
+    url: `https://shopfinder.com/categories/${slug}`,
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://shopfinder.in" },
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://shopfinder.com" },
         { "@type": "ListItem", position: 2, name: category.name },
       ],
     },

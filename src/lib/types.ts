@@ -11,6 +11,7 @@ export interface Business {
   tags: string[];
   verified: boolean;
   addedAt: string;
+  status?: "approved" | "pending";
 }
 
 export interface Category {
@@ -20,4 +21,13 @@ export interface Category {
   icon: string;
   description: string;
   subCategories: string[];
+}
+
+export interface SubmitBusinessInput {
+  instagramHandle: string;
+  businessName: string;
+  category: string;
+  city: string;
+  state: string;
+  description: string;
 }
