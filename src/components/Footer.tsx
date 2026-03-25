@@ -10,11 +10,11 @@ export default function Footer() {
             <div className="flex items-center gap-2 mb-3">
               <Store className="w-6 h-6 text-pink-500" />
               <span className="text-lg font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-                InstaDirectory
+                ShopFinder
               </span>
             </div>
             <p className="text-sm text-gray-500">
-              Discover the best small businesses on Instagram. Curated, rated, and loved by the community.
+              Discover the best small businesses on Instagram in India. Curated, rated, and loved by the community.
             </p>
           </div>
           <div>
@@ -35,7 +35,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-400">
-          &copy; {new Date().getFullYear()} InstaDirectory. Built with love for small businesses.
+          &copy; {new Date().getFullYear()} ShopFinder. Built with love for small businesses.
         </div>
       </div>
     </footer>

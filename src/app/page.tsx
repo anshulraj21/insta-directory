@@ -7,8 +7,26 @@ import BusinessCard from "@/components/BusinessCard";
 export default function HomePage() {
   const featuredBusinesses = businesses.slice(0, 8);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "ShopFinder",
+    url: "https://shopfinder.in",
+    description:
+      "Discover 425+ curated small businesses on Instagram in India.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://shopfinder.in/search?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero */}
       <section className="bg-gradient-to-br from-pink-50 via-purple-50 to-white py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

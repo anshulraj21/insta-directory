@@ -22,6 +22,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${business.businessName} - ${business.subCategory} on Instagram`,
     description: `${business.description}. Find ${business.businessName} (${business.instagramHandle}) on Instagram. ${business.category} in India.`,
+    openGraph: {
+      title: `${business.businessName} - ${business.subCategory} on Instagram`,
+      description: `${business.description}. ${business.category} in India.`,
+    },
+    alternates: {
+      canonical: `/business/${handle}`,
+    },
   };
 }
 
@@ -36,8 +43,35 @@ export default async function BusinessPage({ params }: Props) {
     .filter((b) => b.category === business.category && b.id !== business.id)
     .slice(0, 4);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: business.businessName,
+    description: business.description,
+    url: `https://shopfinder.in/business/${handle}`,
+    sameAs: [`https://instagram.com/${handle}`],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: business.city || undefined,
+      addressRegion: business.state || undefined,
+      addressCountry: "IN",
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://shopfinder.in" },
+        { "@type": "ListItem", position: 2, name: business.category, item: `https://shopfinder.in/categories/${categorySlug}` },
+        { "@type": "ListItem", position: 3, name: business.businessName },
+      ],
+    },
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
         <Link href="/" className="hover:text-gray-900">Home</Link>

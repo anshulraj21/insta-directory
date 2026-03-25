@@ -25,7 +25,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2">
             <Store className="w-7 h-7 text-pink-500" />
             <span className="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-              InstaDirectory
+              ShopFinder
             </span>
           </Link>
 

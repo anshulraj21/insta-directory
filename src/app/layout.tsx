@@ -10,19 +10,39 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://shopfinder.in"),
   title: {
-    default: "InstaDirectory - Discover Small Businesses on Instagram",
-    template: "%s | InstaDirectory",
+    default: "ShopFinder - Discover Small Businesses on Instagram in India",
+    template: "%s | ShopFinder",
   },
   description:
-    "Discover the best small businesses on Instagram in India. Browse by category, read community ratings, and find hidden gems.",
+    "Discover 425+ curated small businesses on Instagram in India. Browse by category, read community ratings, and find hidden gems across fashion, jewelry, food, beauty, and more.",
   keywords: [
-    "Instagram businesses",
+    "Instagram businesses India",
     "small business India",
-    "handmade",
-    "artisan",
     "Instagram shops",
+    "handmade India",
+    "artisan brands",
+    "shop on Instagram",
+    "Indian small businesses",
   ],
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    siteName: "ShopFinder",
+    title: "ShopFinder - Discover Small Businesses on Instagram in India",
+    description:
+      "Browse 425+ curated Indian small businesses on Instagram. Fashion, jewelry, food, beauty, home decor, and more.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ShopFinder - Discover Small Businesses on Instagram",
+    description:
+      "Browse 425+ curated Indian small businesses on Instagram across 11 categories.",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({

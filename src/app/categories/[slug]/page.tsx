@@ -22,6 +22,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `Best ${category.name} Instagram Businesses in India`,
     description: `Discover ${category.name.toLowerCase()} small businesses on Instagram. ${category.description}`,
+    openGraph: {
+      title: `Best ${category.name} Instagram Businesses in India`,
+      description: `Discover ${category.name.toLowerCase()} small businesses on Instagram. ${category.description}`,
+    },
+    alternates: {
+      canonical: `/categories/${slug}`,
+    },
   };
 }
 
@@ -55,8 +62,27 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     )
   ).sort();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `Best ${category.name} Instagram Businesses in India`,
+    description: category.description,
+    url: `https://shopfinder.in/categories/${slug}`,
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://shopfinder.in" },
+        { "@type": "ListItem", position: 2, name: category.name },
+      ],
+    },
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <Link href="/" className="hover:text-gray-900">Home</Link>
