@@ -1,6 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { getDb } from "./mongodb";
-import { Business, Category, SubmitBusinessInput } from "./types";
+import { Business, Category, SubmitBusinessInput, Review, ReviewStats } from "./types";
 
 // --- Categories ---
 
@@ -189,6 +189,85 @@ export const getUniqueStates = unstable_cache(
   ["unique-states"],
   { revalidate: 3600, tags: ["businesses"] }
 );
+
+// --- Reviews ---
+
+export async function getReviewsForBusiness(
+  businessId: string
+): Promise<Review[]> {
+  const db = await getDb();
+  const docs = await db
+    .collection("reviews")
+    .find({ businessId })
+    .sort({ createdAt: -1 })
+    .limit(50)
+    .toArray();
+  return docs.map(({ _id, ...rest }) => rest) as unknown as Review[];
+}
+
+export async function getReviewStats(
+  businessId: string
+): Promise<ReviewStats> {
+  const db = await getDb();
+  const reviews = await db
+    .collection("reviews")
+    .find({ businessId })
+    .toArray();
+
+  if (reviews.length === 0) {
+    return { averageRating: 0, totalReviews: 0, distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } };
+  }
+
+  const distribution: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  let total = 0;
+  for (const r of reviews) {
+    const rating = r.rating as number;
+    distribution[rating] = (distribution[rating] || 0) + 1;
+    total += rating;
+  }
+
+  return {
+    averageRating: Math.round((total / reviews.length) * 10) / 10,
+    totalReviews: reviews.length,
+    distribution,
+  };
+}
+
+export async function submitReview(data: {
+  businessId: string;
+  authorName: string;
+  rating: number;
+  comment: string;
+}): Promise<void> {
+  const db = await getDb();
+
+  if (data.rating < 1 || data.rating > 5) {
+    throw new Error("Rating must be between 1 and 5");
+  }
+  if (!data.comment.trim() || data.comment.trim().length < 10) {
+    throw new Error("Review must be at least 10 characters");
+  }
+  if (!data.authorName.trim()) {
+    throw new Error("Name is required");
+  }
+
+  await db.collection("reviews").insertOne({
+    id: `review-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    businessId: data.businessId,
+    authorName: data.authorName.trim(),
+    rating: Math.round(data.rating),
+    comment: data.comment.trim(),
+    createdAt: new Date().toISOString(),
+    helpful: 0,
+  });
+}
+
+export async function markReviewHelpful(reviewId: string): Promise<void> {
+  const db = await getDb();
+  await db
+    .collection("reviews")
+    .updateOne({ id: reviewId }, { $inc: { helpful: 1 } });
+}
 
 // --- Submit ---
 

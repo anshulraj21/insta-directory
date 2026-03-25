@@ -6,6 +6,7 @@ import { getAllBusinesses, getBusinessByHandle, getAllCategories, getRelatedBusi
 import BusinessCard from "@/components/BusinessCard";
 import InstagramEmbed from "@/components/InstagramEmbed";
 import BusinessThumbnail from "@/components/BusinessThumbnail";
+import ReviewSection from "@/components/ReviewSection";
 
 interface Props {
   params: Promise<{ handle: string }>;
@@ -192,6 +193,9 @@ export default async function BusinessPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Community Reviews */}
+      <ReviewSection businessId={business.id} businessName={business.businessName} />
 
       {/* Related Businesses */}
       {relatedBusinesses.length > 0 && (
