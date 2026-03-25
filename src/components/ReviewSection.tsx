@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { MessageCircle, ThumbsUp, User } from "lucide-react";
+import { useSession, signIn } from "next-auth/react";
+import { MessageCircle, ThumbsUp, User, LogIn, ExternalLink } from "lucide-react";
 import StarRating from "@/components/StarRating";
 import ReviewForm from "@/components/ReviewForm";
 import { Review, ReviewStats } from "@/lib/types";
@@ -13,6 +14,7 @@ export default function ReviewSection({
   businessId: string;
   businessName: string;
 }) {
+  const { data: session, status } = useSession();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [stats, setStats] = useState<ReviewStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,6 +48,14 @@ export default function ReviewSection({
     fetchReviews();
   }
 
+  function handleWriteReview() {
+    if (status === "unauthenticated") {
+      signIn("google");
+      return;
+    }
+    setShowForm(!showForm);
+  }
+
   function timeAgo(dateStr: string): string {
     const diff = Date.now() - new Date(dateStr).getTime();
     const mins = Math.floor(diff / 60000);
@@ -72,10 +82,19 @@ export default function ReviewSection({
           )}
         </div>
         <button
-          onClick={() => setShowForm(!showForm)}
-          className="text-sm bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition"
+          onClick={handleWriteReview}
+          className="text-sm bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition flex items-center gap-1.5"
         >
-          {showForm ? "Cancel" : "Write a Review"}
+          {status === "unauthenticated" ? (
+            <>
+              <LogIn className="w-3.5 h-3.5" />
+              Sign in to Review
+            </>
+          ) : showForm ? (
+            "Cancel"
+          ) : (
+            "Write a Review"
+          )}
         </button>
       </div>
 
@@ -115,14 +134,34 @@ export default function ReviewSection({
         </div>
       )}
 
-      {/* Review Form */}
-      {showForm && (
+      {/* Review Form (only for authenticated users) */}
+      {showForm && session?.user && (
         <div className="mb-6 p-4 bg-pink-50 rounded-lg border border-pink-100">
-          <h3 className="font-medium text-gray-900 mb-3">
-            Rate {businessName}
-          </h3>
+          <div className="flex items-center gap-2 mb-3">
+            {session.user.image ? (
+              <img
+                src={session.user.image}
+                alt=""
+                className="w-8 h-8 rounded-full"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-pink-200 flex items-center justify-center">
+                <User className="w-4 h-4 text-pink-600" />
+              </div>
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">
+                {session.user.name}
+              </p>
+              <p className="text-xs text-gray-400">
+                Posting as {session.user.email}
+              </p>
+            </div>
+          </div>
           <ReviewForm
             businessId={businessId}
+            userName={session.user.name || "Anonymous"}
             onSubmitted={() => {
               fetchReviews();
               setShowForm(false);
@@ -159,6 +198,17 @@ export default function ReviewSection({
                   <span className="text-sm font-medium text-gray-900">
                     {review.authorName}
                   </span>
+                  {review.instagramHandle && (
+                    <a
+                      href={`https://instagram.com/${review.instagramHandle.replace("@", "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-pink-500 hover:text-pink-600 flex items-center gap-0.5"
+                    >
+                      @{review.instagramHandle.replace("@", "")}
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  )}
                   <span className="text-xs text-gray-400">
                     {timeAgo(review.createdAt)}
                   </span>

@@ -238,6 +238,8 @@ export async function submitReview(data: {
   authorName: string;
   rating: number;
   comment: string;
+  userId?: string;
+  instagramHandle?: string;
 }): Promise<void> {
   const db = await getDb();
 
@@ -247,14 +249,25 @@ export async function submitReview(data: {
   if (!data.comment.trim() || data.comment.trim().length < 10) {
     throw new Error("Review must be at least 10 characters");
   }
-  if (!data.authorName.trim()) {
-    throw new Error("Name is required");
+
+  // Enforce 1 review per user per business
+  if (data.userId) {
+    const existing = await db
+      .collection("reviews")
+      .findOne({ businessId: data.businessId, userId: data.userId });
+    if (existing) {
+      throw new Error("You have already reviewed this business");
+    }
   }
 
   await db.collection("reviews").insertOne({
     id: `review-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     businessId: data.businessId,
     authorName: data.authorName.trim(),
+    userId: data.userId || "",
+    instagramHandle: data.instagramHandle
+      ? data.instagramHandle.replace(/^@/, "")
+      : undefined,
     rating: Math.round(data.rating),
     comment: data.comment.trim(),
     createdAt: new Date().toISOString(),

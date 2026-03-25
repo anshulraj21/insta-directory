@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 import {
   getReviewsForBusiness,
   getReviewStats,
@@ -34,23 +35,41 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { businessId, authorName, rating, comment, action, reviewId } = body;
+    const { action, reviewId } = body;
 
-    // Handle "helpful" upvote
+    // Handle "helpful" upvote (no auth required)
     if (action === "helpful" && reviewId) {
       await markReviewHelpful(reviewId);
       return NextResponse.json({ success: true });
     }
 
-    // Handle new review submission
-    if (!businessId || !authorName || !rating || !comment) {
+    // For new reviews, require authentication
+    const session = await auth();
+    if (!session?.user) {
       return NextResponse.json(
-        { error: "businessId, authorName, rating, and comment are required" },
+        { error: "You must be signed in to write a review" },
+        { status: 401 }
+      );
+    }
+
+    const { businessId, rating, comment, instagramHandle } = body;
+
+    if (!businessId || !rating || !comment) {
+      return NextResponse.json(
+        { error: "businessId, rating, and comment are required" },
         { status: 400 }
       );
     }
 
-    await submitReview({ businessId, authorName, rating, comment });
+    await submitReview({
+      businessId,
+      authorName: session.user.name || "Anonymous",
+      rating,
+      comment,
+      userId: session.user.id || session.user.email || "",
+      instagramHandle: instagramHandle || undefined,
+    });
+
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
     const message =

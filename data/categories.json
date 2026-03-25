@@ -86,5 +86,37 @@
     "icon": "smartphone",
     "description": "Phone cases, laptop skins, gadgets, and custom tech accessories",
     "subCategories": ["Phone Cases & Skins", "Laptop Accessories", "Gadgets"]
+  },
+  {
+    "id": "books-education",
+    "name": "Books & Education",
+    "slug": "books-education",
+    "icon": "book-open",
+    "description": "Independent bookstores, educational content, online courses, and study resources",
+    "subCategories": ["Bookstores", "Educational Content", "Online Courses", "Study Resources"]
+  },
+  {
+    "id": "fitness-sports",
+    "name": "Fitness & Sports",
+    "slug": "fitness-sports",
+    "icon": "dumbbell",
+    "description": "Gym wear, activewear, sports equipment, fitness accessories, and athletic gear",
+    "subCategories": ["Gym Wear & Activewear", "Sports Equipment", "Fitness Accessories", "Athletic Gear"]
+  },
+  {
+    "id": "wedding-events",
+    "name": "Wedding & Events",
+    "slug": "wedding-events",
+    "icon": "party-popper",
+    "description": "Wedding planning, event decoration, invitations, mehendi artists, and party supplies",
+    "subCategories": ["Wedding Planning", "Event Decor", "Invitations & Stationery", "Mehendi Artists", "Party Supplies"]
+  },
+  {
+    "id": "sustainable-eco",
+    "name": "Sustainable & Eco",
+    "slug": "sustainable-eco",
+    "icon": "recycle",
+    "description": "Zero waste products, eco-friendly goods, upcycled items, and sustainable living",
+    "subCategories": ["Zero Waste", "Eco-Friendly Products", "Upcycled Goods", "Sustainable Fashion"]
   }
 ]

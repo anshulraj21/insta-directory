@@ -6,14 +6,16 @@ import StarRating from "@/components/StarRating";
 
 export default function ReviewForm({
   businessId,
+  userName,
   onSubmitted,
 }: {
   businessId: string;
+  userName: string;
   onSubmitted: () => void;
 }) {
   const [rating, setRating] = useState(0);
-  const [name, setName] = useState("");
   const [comment, setComment] = useState("");
+  const [instagramHandle, setInstagramHandle] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -24,10 +26,6 @@ export default function ReviewForm({
 
     if (rating === 0) {
       setError("Please select a rating");
-      return;
-    }
-    if (!name.trim()) {
-      setError("Please enter your name");
       return;
     }
     if (comment.trim().length < 10) {
@@ -42,9 +40,10 @@ export default function ReviewForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           businessId,
-          authorName: name.trim(),
+          authorName: userName,
           rating,
           comment: comment.trim(),
+          instagramHandle: instagramHandle.trim() || undefined,
         }),
       });
 
@@ -55,8 +54,8 @@ export default function ReviewForm({
 
       setSuccess(true);
       setRating(0);
-      setName("");
       setComment("");
+      setInstagramHandle("");
       onSubmitted();
 
       setTimeout(() => setSuccess(false), 3000);
@@ -78,24 +77,6 @@ export default function ReviewForm({
 
       <div>
         <label
-          htmlFor="reviewer-name"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Your Name
-        </label>
-        <input
-          id="reviewer-name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name"
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-          maxLength={50}
-        />
-      </div>
-
-      <div>
-        <label
           htmlFor="review-comment"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
@@ -113,10 +94,36 @@ export default function ReviewForm({
         <p className="text-xs text-gray-400 mt-1">{comment.length}/500</p>
       </div>
 
-      {error && (
-        <p className="text-sm text-red-500">{error}</p>
-      )}
+      <div>
+        <label
+          htmlFor="reviewer-ig"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Your Instagram Handle{" "}
+          <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+            @
+          </span>
+          <input
+            id="reviewer-ig"
+            type="text"
+            value={instagramHandle}
+            onChange={(e) =>
+              setInstagramHandle(e.target.value.replace(/^@/, ""))
+            }
+            placeholder="yourhandle"
+            className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            maxLength={30}
+          />
+        </div>
+        <p className="text-xs text-gray-400 mt-1">
+          Shown publicly on your review so the community can verify you
+        </p>
+      </div>
 
+      {error && <p className="text-sm text-red-500">{error}</p>}
       {success && (
         <p className="text-sm text-green-600">Review submitted successfully!</p>
       )}

@@ -36,6 +36,8 @@ export interface Review {
   id: string;
   businessId: string;
   authorName: string;
+  userId?: string;
+  instagramHandle?: string;
   rating: number; // 1-5
   comment: string;
   createdAt: string;
