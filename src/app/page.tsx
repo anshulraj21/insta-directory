@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Search, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import {
   getAllCategories,
   getBusinessesByCategory,
@@ -9,6 +9,7 @@ import {
 } from "@/lib/data";
 import CategoryCard from "@/components/CategoryCard";
 import BusinessCard from "@/components/BusinessCard";
+import HomeSearch from "@/components/HomeSearch";
 
 export const revalidate = 60;
 
@@ -63,13 +64,7 @@ export default async function HomePage() {
             {categoryCount} categories. Find hidden gems, support local, and
             shop with confidence.
           </p>
-          <Link
-            href="/search?q="
-            className="inline-flex items-center gap-2 bg-white border border-gray-300 rounded-full px-6 py-3 text-gray-500 hover:border-pink-300 hover:shadow-md transition-all max-w-md w-full justify-center"
-          >
-            <Search className="w-5 h-5" />
-            Search businesses, categories, cities...
-          </Link>
+          <HomeSearch />
         </div>
       </section>
 
