@@ -114,7 +114,7 @@ export default async function HomePage() {
               Featured Businesses
             </h2>
             <Link
-              href="/categories/fashion-ethnic-wear"
+              href="/categories"
               className="text-sm text-pink-500 hover:text-pink-600 flex items-center gap-1"
             >
               View all <ArrowRight className="w-4 h-4" />
