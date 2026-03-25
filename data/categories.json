@@ -1,0 +1,90 @@
+[
+  {
+    "id": "fashion-ethnic-wear",
+    "name": "Fashion & Ethnic Wear",
+    "slug": "fashion-ethnic-wear",
+    "icon": "shirt",
+    "description": "Sarees, kurtis, western wear, sustainable fashion, streetwear, and more",
+    "subCategories": ["Sarees", "Kurtis & Ethnic", "Sustainable Fashion", "Western Wear", "Streetwear", "Bridal Wear", "Menswear", "Footwear", "Plus Size"]
+  },
+  {
+    "id": "jewelry-accessories",
+    "name": "Jewelry & Accessories",
+    "slug": "jewelry-accessories",
+    "icon": "gem",
+    "description": "Handmade, silver, oxidized, temple, polymer clay, resin, and bridal jewelry",
+    "subCategories": ["Handmade Jewelry", "Silver & Oxidized", "Temple & Bridal", "Polymer Clay & Resin", "Imitation Jewelry", "Bags & Clutches", "Hair Accessories"]
+  },
+  {
+    "id": "home-decor-handicrafts",
+    "name": "Home Decor & Handicrafts",
+    "slug": "home-decor-handicrafts",
+    "icon": "home",
+    "description": "Pottery, ceramics, candles, handicrafts, furniture, and handmade decor",
+    "subCategories": ["Pottery & Ceramics", "Candles", "Handicrafts", "Furniture & Furnishings", "Wall Art", "Macrame & Textiles", "Lighting"]
+  },
+  {
+    "id": "food-home-bakers",
+    "name": "Food & Home Bakers",
+    "slug": "food-home-bakers",
+    "icon": "cake",
+    "description": "Home bakers, artisan chocolate, organic food, pickles, specialty tea and coffee",
+    "subCategories": ["Home Bakers", "Artisan Chocolate", "Organic Food", "Pickles & Condiments", "Tea & Coffee", "Health Food", "Snacks"]
+  },
+  {
+    "id": "beauty-skincare",
+    "name": "Beauty & Skincare",
+    "slug": "beauty-skincare",
+    "icon": "sparkles",
+    "description": "Natural skincare, Ayurvedic products, handmade soaps, haircare, and men's grooming",
+    "subCategories": ["Natural Skincare", "Ayurvedic", "Handmade Soaps", "Haircare", "Men's Grooming", "Organic Makeup", "Perfumes & Attars"]
+  },
+  {
+    "id": "art-stationery",
+    "name": "Art & Stationery",
+    "slug": "art-stationery",
+    "icon": "palette",
+    "description": "Art prints, stationery, calligraphy, resin art, and custom gifts",
+    "subCategories": ["Stationery & Planners", "Art Prints", "Calligraphy", "Resin Art", "Custom Gifts"]
+  },
+  {
+    "id": "kids-baby-products",
+    "name": "Kids & Baby Products",
+    "slug": "kids-baby-products",
+    "icon": "baby",
+    "description": "Toys, baby clothing, organic essentials, educational products",
+    "subCategories": ["Wooden & Montessori Toys", "Baby Clothing", "Organic Essentials", "Educational Products"]
+  },
+  {
+    "id": "pet-products",
+    "name": "Pet Products",
+    "slug": "pet-products",
+    "icon": "paw-print",
+    "description": "Pet food, treats, accessories, clothing, and grooming products",
+    "subCategories": ["Pet Accessories", "Pet Food & Treats", "Pet Grooming", "Pet Clothing"]
+  },
+  {
+    "id": "plants-gardening",
+    "name": "Plants & Gardening",
+    "slug": "plants-gardening",
+    "icon": "leaf",
+    "description": "Indoor plants, nurseries, planters, seeds, and garden decor",
+    "subCategories": ["Plants & Nurseries", "Planters & Garden Decor", "Seeds & Supplies"]
+  },
+  {
+    "id": "health-wellness",
+    "name": "Health & Wellness",
+    "slug": "health-wellness",
+    "icon": "heart-pulse",
+    "description": "Ayurvedic supplements, yoga products, fitness gear, and wellness brands",
+    "subCategories": ["Supplements & Nutrition", "Yoga & Fitness", "Ayurveda & Herbal", "Mental Wellness"]
+  },
+  {
+    "id": "tech-accessories",
+    "name": "Tech Accessories",
+    "slug": "tech-accessories",
+    "icon": "smartphone",
+    "description": "Phone cases, laptop skins, gadgets, and custom tech accessories",
+    "subCategories": ["Phone Cases & Skins", "Laptop Accessories", "Gadgets"]
+  }
+]
