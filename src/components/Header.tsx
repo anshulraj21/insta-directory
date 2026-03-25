@@ -24,7 +24,7 @@ export default function Header() {
           </div>
 
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/categories/fashion-ethnic-wear" className="text-sm text-gray-600 hover:text-gray-900">
+            <Link href="/categories" className="text-sm text-gray-600 hover:text-gray-900">
               Browse
             </Link>
             <Link href="/submit" className="text-sm bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition">
