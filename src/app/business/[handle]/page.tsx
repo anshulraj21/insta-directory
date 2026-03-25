@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ChevronRight, MapPin, ExternalLink, Tag, Store } from "lucide-react";
 import { getAllBusinesses, getBusinessByHandle, getAllCategories, getRelatedBusinesses } from "@/lib/data";
 import BusinessCard from "@/components/BusinessCard";
+import InstagramEmbed from "@/components/InstagramEmbed";
+import BusinessThumbnail from "@/components/BusinessThumbnail";
 
 interface Props {
   params: Promise<{ handle: string }>;
@@ -88,7 +90,13 @@ export default async function BusinessPage({ params }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl border border-gray-200 p-8">
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <BusinessThumbnail
+              businessName={business.businessName}
+              category={business.category}
+              size="lg"
+            />
+            <div className="p-8">
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -162,10 +170,13 @@ export default async function BusinessPage({ params }: Props) {
               </a>
             </div>
           </div>
+          </div>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
+          <InstagramEmbed handle={handle} />
+
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h3 className="font-semibold text-gray-900 mb-4">Quick Info</h3>
             <dl className="space-y-3 text-sm">
