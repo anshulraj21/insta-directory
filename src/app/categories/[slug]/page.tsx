@@ -6,6 +6,7 @@ import {
   getAllCategories,
   getBusinessesByCategory,
   getCategoryBySlug,
+  getReviewStats,
 } from "@/lib/data";
 import BusinessCard from "@/components/BusinessCard";
 import CategoryFilter from "@/components/CategoryFilter";
@@ -61,8 +62,30 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     );
   }
 
-  // Sort
-  if (sp.sort === "name-asc") {
+  // For rating-based sorts, fetch review stats
+  if (sp.sort === "highest-rated" || sp.sort === "most-reviewed") {
+    const statsMap = new Map<string, { avg: number; total: number }>();
+    await Promise.all(
+      filtered.map(async (b) => {
+        const stats = await getReviewStats(b.id);
+        statsMap.set(b.id, { avg: stats.averageRating, total: stats.totalReviews });
+      })
+    );
+
+    if (sp.sort === "highest-rated") {
+      filtered.sort((a, b) => {
+        const sa = statsMap.get(a.id);
+        const sb = statsMap.get(b.id);
+        return (sb?.avg || 0) - (sa?.avg || 0);
+      });
+    } else {
+      filtered.sort((a, b) => {
+        const sa = statsMap.get(a.id);
+        const sb = statsMap.get(b.id);
+        return (sb?.total || 0) - (sa?.total || 0);
+      });
+    }
+  } else if (sp.sort === "name-asc") {
     filtered.sort((a, b) => a.businessName.localeCompare(b.businessName));
   } else if (sp.sort === "name-desc") {
     filtered.sort((a, b) => b.businessName.localeCompare(a.businessName));

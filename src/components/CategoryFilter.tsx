@@ -15,7 +15,9 @@ interface Props {
 }
 
 const SORT_OPTIONS = [
-  { value: "", label: "Default" },
+  { value: "", label: "Recommended" },
+  { value: "highest-rated", label: "Highest Rated" },
+  { value: "most-reviewed", label: "Most Reviewed" },
   { value: "name-asc", label: "A-Z" },
   { value: "name-desc", label: "Z-A" },
   { value: "newest", label: "Newest Added" },
