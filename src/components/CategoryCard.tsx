@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   Shirt, Gem, Home, Cake, Sparkles, Palette,
   Baby, PawPrint, Leaf, HeartPulse, Smartphone,
+  BookOpen, Dumbbell, PartyPopper, Recycle,
 } from "lucide-react";
 import { Category } from "@/lib/types";
 
@@ -17,6 +18,10 @@ const iconMap: Record<string, React.ElementType> = {
   leaf: Leaf,
   "heart-pulse": HeartPulse,
   smartphone: Smartphone,
+  "book-open": BookOpen,
+  dumbbell: Dumbbell,
+  "party-popper": PartyPopper,
+  recycle: Recycle,
 };
 
 const gradientMap: Record<string, string> = {
@@ -31,6 +36,10 @@ const gradientMap: Record<string, string> = {
   leaf: "from-green-400 to-emerald-500",
   "heart-pulse": "from-red-400 to-rose-500",
   smartphone: "from-slate-400 to-gray-600",
+  "book-open": "from-orange-400 to-amber-500",
+  dumbbell: "from-blue-500 to-indigo-600",
+  "party-popper": "from-pink-400 to-yellow-400",
+  recycle: "from-lime-400 to-green-500",
 };
 
 export default function CategoryCard({
